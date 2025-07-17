@@ -1,0 +1,2555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Entrevista Trabalhista - Marques & Alves</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global styles and fonts */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8; /* Very light background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top to prevent form from floating too much in the center */
+            min-height: 100vh;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            width: 100%; /* Ensures it takes full available width up to max-width */
+            margin: 40px auto; /* Top and bottom margin, centered */
+            background: #fff;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1); /* Subtle shadow */
+            border-radius: 12px; /* Rounded borders */
+            overflow: hidden; /* Ensures shadow and borders are applied correctly */
+        }
+
+        /* Header */
+        header {
+            background: #000000; /* Solid black */
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-img {
+            max-width: 300px; /* Adjusted size for the logo (larger) */
+            height: auto;
+            margin-bottom: 15px; /* More space below the logo */
+            border-radius: 8px; /* Rounded borders for the logo */
+        }
+
+        .main-title {
+            font-size: 2.2rem; /* Main title size */
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Text shadow */
+            margin-bottom: 5px;
+        }
+
+        .slogan {
+            font-size: 1.3rem; /* Slogan size */
+            font-weight: 700; /* Bold for slogan */
+            color: #f0f0f0;
+            margin-top: 10px; /* More space above slogan */
+            /* Stamp style */
+            position: relative;
+            display: inline-block;
+            padding: 5px 15px;
+            border: 3px solid #f0f0f0; /* Border for stamp effect */
+            transform: rotate(-3deg); /* Slight rotation */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: calc(100% - 40px); /* Adjust width for padding */
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 10px;
+            margin: 20px auto; /* Center the progress bar */
+            overflow: hidden;
+            position: relative; /* Needed for section title positioning */
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #feca57); /* Colorful gradient */
+            width: 0%; /* Initial width */
+            border-radius: 10px;
+            transition: width 0.5s ease-in-out; /* Smooth transition */
+        }
+
+        .section-indicator {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        /* Form Sections */
+        .form-section {
+            padding: 30px 40px; /* Internal padding for sections */
+            display: none; /* Hide all sections by default */
+            animation: fadeIn 0.5s ease-in-out; /* Fade-in animation */
+        }
+
+        .form-section.active {
+            display: block; /* Display active section */
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db; /* Blue line */
+            text-align: center;
+        }
+
+        /* Input Fields */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative; /* For tooltip and validation icons */
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px; /* Rounded borders */
+            font-size: 1rem;
+            background: #fafafa; /* Light background */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #3498db; /* Blue border on focus */
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3); /* Blue shadow on focus */
+        }
+
+        /* Validation Feedback */
+        .form-input.valid, .form-textarea.valid, .form-select.valid {
+            border-color: #27ae60; /* Green */
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.3);
+        }
+
+        .form-input.invalid, .form-textarea.invalid, .form-select.invalid {
+            border-color: #e74c3c; /* Red */
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+        }
+        
+        /* Highlight specific invalid input */
+        .form-input.highlight-invalid {
+            border-color: #e74c3c; /* Red */
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+            animation: pulse-red 1s infinite alternate; /* Pulsing red animation */
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3); }
+            100% { box-shadow: 0 0 0 6px rgba(231, 76, 60, 0.6); }
+        }
+
+        /* Checkbox and Radio */
+        .checkbox-group, .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px; /* Spacing between items */
+            margin-top: 10px;
+        }
+
+        .checkbox-item, .radio-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .checkbox-item input[type="checkbox"], .radio-item input[type="radio"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            accent-color: #3498db; /* Accent color for checkboxes/radios */
+        }
+
+        /* Two-Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 40px;
+            background-color: #f0f0f0; /* Background for buttons */
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px; /* Rounded buttons */
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #3498db, #2980b9); /* Blue gradient */
+            color: white;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6; /* Neutral gray */
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        .btn-submit {
+            background: linear-gradient(90deg, #27ae60, #229a53); /* Green gradient for submit */
+            color: white;
+        }
+
+        .btn-submit:hover {
+            box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Selfie styles */
+        #selfieContainer {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #selfieVideo {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+        #selfieCanvas {
+            display: none; /* Hidden by default */
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+        }
+        #takeSelfieBtn, #retakeSelfieBtn, #uploadSelfieBtn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #takeSelfieBtn, #uploadSelfieBtn {
+            background-color: #3498db;
+            color: white;
+        }
+        #takeSelfieBtn:hover, #uploadSelfieBtn:hover {
+            background-color: #2980b9;
+        }
+        #retakeSelfieBtn {
+            background-color: #e74c3c;
+            color: white;
+            margin-left: 10px;
+        }
+        #retakeSelfieBtn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Tooltip styles */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 250px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above the text */
+            left: 50%;
+            margin-left: -125px; /* Center the tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%; /* At the bottom of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Validation Icons */
+        .validation-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            pointer-events: none; /* Allows clicks to pass through to the input */
+        }
+
+        .text-green-500 {
+            color: #27ae60;
+        }
+
+        .text-red-500 {
+            color: #e74c3c;
+        }
+
+        /* Blinking animation for valid fields */
+        @keyframes blink-green {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .blink-green {
+            animation: blink-green 0.5s ease-in-out 2; /* Blink twice */
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: translateY(-50px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .modal-message {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background-color: #fff;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                border-radius: 0;
+            }
+            header, .navigation-buttons, .progress-container, #selfieContainer, #takeSelfieBtn, #retakeSelfieBtn, #uploadSelfieBtn, #fileInput, .tooltip-container, .validation-icon, .modal-overlay {
+                display: none !important; /* Hide header, buttons, progress bar, selfie, tooltips, validation icons, and modal */
+            }
+            .form-section {
+                display: block !important; /* Display all sections for printing */
+                page-break-inside: avoid; /* Avoid page breaks inside sections */
+                margin-bottom: 1rem;
+                padding: 1rem;
+                background-color: #fff;
+                border: 1px solid #eee;
+            }
+            .form-section-title {
+                color: #333;
+                border-color: #ccc;
+            }
+            .form-label, .text-gray-700 {
+                color: #555;
+            }
+            .form-input, .form-textarea, .form-select {
+                border: 1px solid #ccc;
+                background-color: #f9f9f9;
+                print-color-adjust: exact; /* Ensures background colors are printed */
+            }
+            .checkbox-item input, .radio-item input {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            /* Ensures signature lines are visible */
+            .border-b {
+                border-color: #000 !important;
+            }
+            /* Ensures selfie appears in print if taken */
+            #selfieCanvas[data-selfie-taken="true"] {
+                display: block !important;
+                max-width: 200px; /* Smaller size for printing */
+                height: auto;
+                margin: 10px auto;
+            }
+        }
+
+        /* Responsiveness for smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                border-radius: 0; /* Remove rounded borders on mobile to take 100% width */
+            }
+            header {
+                padding: 30px 15px;
+                border-radius: 0;
+            }
+            .main-title {
+                font-size: 1.8rem;
+            }
+            .slogan {
+                font-size: 1.1rem;
+            }
+            .logo-img {
+                max-width: 180px;
+            }
+            .form-section {
+                padding: 20px 25px;
+            }
+            .form-section-title {
+                font-size: 1.5rem;
+            }
+            .two-column {
+                grid-template-columns: 1fr; /* One column on smaller screens */
+                gap: 15px;
+            }
+            .navigation-buttons {
+                padding: 15px 25px;
+                flex-direction: column; /* Buttons stacked on small screens */
+                gap: 15px;
+                border-radius: 0;
+            }
+            .btn {
+                width: 100%; /* Buttons take full width */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <img src="0005.png" alt="Marques & Alves Advogados Associados Logo" class="logo-img">
+                <h1 class="main-title">FORMULÁRIO DE ENTREVISTA TRABALHISTA</h1>
+                <p class="slogan">A DEFESA NUNCA PARA!</p>
+            </div>
+        </header>
+
+        <div class="progress-container">
+            <div id="progressBarFill" class="progress-fill"></div>
+        </div>
+        <div id="sectionIndicator" class="section-indicator"></div>
+
+        <form id="laborForm">
+            <section id="step-1" class="form-section active">
+                <h2 class="form-section-title">DADOS PESSOAIS DO CLIENTE</h2>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="nome_completo" class="form-label">
+                            Nome Completo:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Insira seu nome completo, sem abreviações.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="nome_completo" name="nome_completo" placeholder="INSIRA SEU NOME COMPLETO" class="form-input" required>
+                        <span class="validation-icon" id="nome_completo_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="data_nascimento" class="form-label">
+                            Data de Nascimento:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Informe sua data de nascimento no formato DD/MM/AAAA.</span>
+                            </span>
+                        </label>
+                        <input type="date" id="data_nascimento" name="data_nascimento" class="form-input" required>
+                        <span class="validation-icon" id="data_nascimento_icon"></span>
+                    </div>
+                </div>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="cpf" class="form-label">
+                            CPF:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Insira seu Cadastro de Pessoa Física. Somente números.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" class="form-input" required>
+                        <span class="validation-icon" id="cpf_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="rg" class="form-label">
+                            RG:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Insira seu Registro Geral.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="rg" name="rg" placeholder="00.000.000-0" class="form-input" required>
+                        <span class="validation-icon" id="rg_icon"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="estado_rg" class="form-label">
+                        Estado do Brasil onde foi feito seu RG:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Selecione o estado onde seu RG foi emitido.</span>
+                        </span>
+                    </label>
+                    <select id="estado_rg" name="estado_rg" class="form-select" required>
+                        <option value="">Selecione o Estado</option>
+                        <option value="AC">Acre</option><option value="AL">Alagoas</option><option value="AP">Amapá</option><option value="AM">Amazonas</option><option value="BA">Bahia</option><option value="CE">Ceará</option><option value="DF">Distrito Federal</option><option value="ES">Espírito Santo</option><option value="GO">Goiás</option><option value="MA">Maranhão</option><option value="MT">Mato Grosso</option><option value="MS">Mato Grosso do Sul</option><option value="MG">Minas Gerais</option><option value="PA">Pará</option><option value="PB">Paraíba</option><option value="PR">Paraná</option><option value="PE">Pernambuco</option><option value="PI">Piauí</option><option value="RJ">Rio de Janeiro</option><option value="RN">Rio Grande do Norte</option><option value="RS">Rio Grande do Sul</option><option value="RO">Rondônia</option><option value="RR">Roraima</option><option value="SC">Santa Catarina</option><option value="SP">São Paulo</option><option value="SE">Sergipe</option><option value="TO">Tocantins</option>
+                    </select>
+                    <span class="validation-icon" id="estado_rg_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="estado_civil" class="form-label">
+                        Estado Civil:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Selecione seu estado civil atual. Se em união estável, marque se possui o documento do cartório.</span>
+                        </span>
+                    </label>
+                    <select id="estado_civil" name="estado_civil" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option value="solteiro">Solteiro(a)</option>
+                        <option value="casado">Casado(a)</option>
+                        <option value="divorciado">Divorciado(a)</option>
+                        <option value="viuvo">Viúvo(a)</option>
+                        <option value="separado_judicialmente">Separado(a) judicialmente</option>
+                        <option value="uniao_estavel">União Estável (com documento do cartório)</option>
+                    </select>
+                    <span class="validation-icon" id="estado_civil_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="cep" class="form-label">
+                        Número do CEP:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Digite seu CEP para preenchimento automático do endereço.</span>
+                        </span>
+                    </label>
+                    <input type="text" id="cep" name="cep" placeholder="00000-000" class="form-input" required maxlength="9">
+                    <span class="validation-icon" id="cep_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="endereco_rua" class="form-label">
+                        Endereço Completo (Rua):
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Este campo será preenchido automaticamente após informar o CEP.</span>
+                        </span>
+                    </label>
+                    <input type="text" id="endereco_rua" name="endereco_rua" placeholder="Será preenchido automaticamente" class="form-input" readonly required>
+                    <span class="validation-icon" id="endereco_rua_icon"></span>
+                </div>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="numero_casa" class="form-label">
+                            Número da casa:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Insira o número do seu imóvel. Campo obrigatório.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="numero_casa" name="numero_casa" placeholder="COLOQUE O NÚMERO DA SUA CASA" class="form-input" required>
+                        <span class="validation-icon" id="numero_casa_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="nome_bairro" class="form-label">
+                            Nome do bairro:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Este campo será preenchido automaticamente após informar o CEP.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="nome_bairro" name="nome_bairro" placeholder="Será preenchido automaticamente" class="form-input" readonly required>
+                        <span class="validation-icon" id="nome_bairro_icon"></span>
+                    </div>
+                </div>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="nome_cidade" class="form-label">
+                            Nome da cidade:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Este campo será preenchido automaticamente após informar o CEP.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="nome_cidade" name="nome_cidade" placeholder="Será preenchido automaticamente" class="form-input" readonly required>
+                        <span class="validation-icon" id="nome_cidade_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="nome_estado" class="form-label">
+                            Nome do estado:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Este campo será preenchido automaticamente após informar o CEP.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="nome_estado" name="nome_estado" placeholder="Será preenchido automaticamente" class="form-input" readonly required>
+                        <span class="validation-icon" id="nome_estado_icon"></span>
+                    </div>
+                </div>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="whatsapp" class="form-label">
+                            WhatsApp:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Número de telefone com WhatsApp, incluindo o DDD.</span>
+                            </span>
+                        </label>
+                        <input type="tel" id="whatsapp" name="whatsapp" placeholder="(DD) 9XXXX-XXXX" class="form-input" required>
+                        <span class="validation-icon" id="whatsapp_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone_emergencia" class="form-label">
+                            Telefone de emergência:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Número de telefone para contato em caso de emergência (diferente do seu WhatsApp).</span>
+                            </span>
+                        </label>
+                        <input type="tel" id="telefone_emergencia" name="telefone_emergencia" placeholder="(DD) 9XXXX-XXXX (diferente do seu WhatsApp)" class="form-input">
+                        <span class="validation-icon" id="telefone_emergencia_icon"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        E-mail:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Insira seu endereço de e-mail principal para contato.</span>
+                        </span>
+                    </label>
+                    <input type="email" id="email" name="email" placeholder="COLOQUE O SEU ENDEREÇO DE E-MAIL" class="form-input" required>
+                    <span class="validation-icon" id="email_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="profissao" class="form-label">
+                        Profissão/Ocupação:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Qual sua profissão atual? Se desempregado, informe "Desempregado".</span>
+                        </span>
+                    </label>
+                    <input type="text" id="profissao" name="profissao" placeholder="QUAL É A SUA PROFISSÃO ATUAL, SE NÃO ESTIVER TRABALHANDO COLOQUE DESEMPREGADO" class="form-input" required>
+                    <span class="validation-icon" id="profissao_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Preferências de Comunicação:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="receber_email" name="receber_email" value="sim" checked>
+                            <label for="receber_email">Desejo receber comunicação por e-mail</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="receber_whatsapp" name="receber_whatsapp" value="sim" checked>
+                            <label for="receber_whatsapp">Desejo receber atualizações pelo WhatsApp</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="numero_dependentes" class="form-label">
+                        Número de dependentes (se houver):
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Informe o número de pessoas que dependem financeiramente de você.</span>
+                        </span>
+                    </label>
+                    <input type="number" id="numero_dependentes" name="numero_dependentes" placeholder="0" class="form-input" min="0" value="0">
+                    <span class="validation-icon" id="numero_dependentes_icon"></span>
+                </div>
+            </section>
+
+            <section id="step-2" class="form-section">
+                <h2 class="form-section-title">DADOS DA EMPRESA/EMPREGADOR</h2>
+                <div class="form-group">
+                    <label for="razao_social" class="form-label">
+                        Razão Social:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Nome legal da empresa, conforme seu holerite ou registro.</span>
+                        </span>
+                    </label>
+                    <input type="text" id="razao_social" name="razao_social" placeholder="COLOQUE O NOME DA EMPRESA CONFORME SEU HOLERITE" class="form-input" required>
+                    <span class="validation-icon" id="razao_social_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="nome_fantasia" class="form-label">
+                        Nome Fantasia:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Nome comercial da empresa. Se não souber, repita a Razão Social.</span>
+                        </span>
+                    </label>
+                    <input type="text" id="nome_fantasia" name="nome_fantasia" placeholder="SE NÃO SOUBER REPITA O NOME DE CIMA" class="form-input">
+                    <span class="validation-icon" id="nome_fantasia_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="cnpj" class="form-label">
+                        CNPJ:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Cadastro Nacional de Pessoa Jurídica da empresa (encontrado no holerite).</span>
+                        </span>
+                    </label>
+                    <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00 (aparece no holerite)" class="form-input" required>
+                    <span class="validation-icon" id="cnpj_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="cep_empresa" class="form-label">
+                        Número do CEP da rua da empresa:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Digite o CEP do endereço da empresa.</span>
+                        </span>
+                    </label>
+                    <input type="text" id="cep_empresa" name="cep_empresa" placeholder="00000-000" class="form-input" required maxlength="9">
+                    <span class="validation-icon" id="cep_empresa_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="endereco_empresa_rua" class="form-label">
+                        Endereço Completo (Rua da Empresa):
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Este campo será preenchido automaticamente após informar o CEP da empresa.</span>
+                        </span>
+                    </label>
+                    <input type="text" id="endereco_empresa_rua" name="endereco_empresa_rua" placeholder="Será preenchido automaticamente" class="form-input" readonly required>
+                    <span class="validation-icon" id="endereco_empresa_rua_icon"></span>
+                </div>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="numero_empresa" class="form-label">
+                            Número da empresa:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Insira o número do imóvel da empresa. Campo obrigatório.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="numero_empresa" name="numero_empresa" placeholder="COLOQUE O NÚMERO" class="form-input" required>
+                        <span class="validation-icon" id="numero_empresa_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="bairro_empresa" class="form-label">
+                            Nome do bairro onde a empresa fica:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Este campo será preenchido automaticamente após informar o CEP da empresa.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="bairro_empresa" name="bairro_empresa" placeholder="Será preenchido automaticamente" class="form-input" readonly required>
+                        <span class="validation-icon" id="bairro_empresa_icon"></span>
+                    </div>
+                </div>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="cidade_empresa" class="form-label">
+                            Nome da cidade onde a empresa fica:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Este campo será preenchido automaticamente após informar o CEP da empresa.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="cidade_empresa" name="cidade_empresa" placeholder="Será preenchido automaticamente" class="form-input" readonly required>
+                        <span class="validation-icon" id="cidade_empresa_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado_empresa" class="form-label">
+                            Nome do estado que a empresa tem sede:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Este campo será preenchido automaticamente após informar o CEP da empresa.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="estado_empresa" name="estado_empresa" placeholder="Será preenchido automaticamente" class="form-input" readonly required>
+                        <span class="validation-icon" id="estado_empresa_icon"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ramo_atividade" class="form-label">
+                        Ramo de Atividade:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Descreva o principal serviço ou setor de atuação da empresa.</span>
+                        </span>
+                    </label>
+                    <input type="text" id="ramo_atividade" name="ramo_atividade" placeholder="QUAL É O PRINCIPAL SERVIÇO QUE A EMPRESA PRESTA?" class="form-input" required>
+                    <span class="validation-icon" id="ramo_atividade_icon"></span>
+                </div>
+            </section>
+
+            <section id="step-3" class="form-section">
+                <h2 class="form-section-title">DADOS DO CONTRATO DE TRABALHO</h2>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="data_admissao" class="form-label">
+                            Data de Admissão (DD/MM/AAAA):
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Data em que você começou a trabalhar na empresa.</span>
+                            </span>
+                        </label>
+                        <input type="date" id="data_admissao" name="data_admissao" class="form-input" required>
+                        <span class="validation-icon" id="data_admissao_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="data_demissao" class="form-label">
+                            Data de Demissão (DD/MM/AAAA):
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Se já foi demitido, informe a data da demissão. Se ainda trabalha, deixe em branco.</span>
+                            </span>
+                        </label>
+                        <input type="date" id="data_demissao" name="data_demissao" class="form-input">
+                        <span class="validation-icon" id="data_demissao_icon"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p id="tempo_registro" style="color: red; font-weight: bold; margin-top: 10px;"></p>
+                </div>
+                <div class="form-group">
+                    <label for="trabalhando_ainda" class="form-label">
+                        Está trabalhando ainda?
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Selecione se você ainda está empregado na empresa em questão.</span>
+                        </span>
+                    </label>
+                    <select id="trabalhando_ainda" name="trabalhando_ainda" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option value="sim">SIM</option>
+                        <option value="nao">NÃO</option>
+                        <option value="ferias">ESTOU DE FÉRIAS</option>
+                    </select>
+                    <span class="validation-icon" id="trabalhando_ainda_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="cargo_funcao" class="form-label">
+                        Cargo/Função:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Seu cargo ou função exercida na empresa.</span>
+                        </span>
+                    </label>
+                    <input type="text" id="cargo_funcao" name="cargo_funcao" class="form-input" required>
+                    <span class="validation-icon" id="cargo_funcao_icon"></span>
+                </div>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="salario_admissao" class="form-label">
+                            Salário na Admissão (R$):
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Seu salário bruto no início do contrato.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="salario_admissao" name="salario_admissao" placeholder="0.00" class="form-input mask-money" required>
+                        <span class="validation-icon" id="salario_admissao_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="ultimo_salario" class="form-label">
+                            Último Salário (R$):
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Seu último salário bruto recebido.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="ultimo_salario" name="ultimo_salario" placeholder="0.00" class="form-input mask-money" required>
+                        <span class="validation-icon" id="ultimo_salario_icon"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="data_ultimo_salario" class="form-label">
+                        Data do Último Salário (DD/MM/AAAA):
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Data do pagamento do seu último salário.</span>
+                        </span>
+                    </label>
+                    <input type="date" id="data_ultimo_salario" name="data_ultimo_salario" class="form-input" required>
+                    <span class="validation-icon" id="data_ultimo_salario_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="tipo_contrato" class="form-label">
+                        Tipo de Contrato:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Selecione o tipo de contrato de trabalho (ex: CLT, Temporário, Estágio).</span>
+                        </span>
+                    </label>
+                    <select id="tipo_contrato" name="tipo_contrato" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option value="clt">CLT</option><option value="temporario">Temporário</option><option value="estagio">Estágio</option><option value="aprendizagem">Aprendizagem</option><option value="intermitente">Intermitente</option><option value="autonomo_pj">Autônomo/PJ</option><option value="home_office">Home Office</option><option value="outro_contrato">Outro</option>
+                    </select>
+                    <span class="validation-icon" id="tipo_contrato_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="tipo_jornada" class="form-label">
+                        Tipo de Jornada:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Selecione o tipo de jornada de trabalho (ex: 8h/dia, 12x36).</span>
+                        </span>
+                    </label>
+                    <select id="tipo_jornada" name="tipo_jornada" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option value="horario_comercial">HORÁRIO COMERCIAL</option>
+                        <option value="turno_tarde">TURNO DA TARDE</option>
+                        <option value="turno_noite">TURNO DA NOITE</option>
+                        <option value="8h_dia">8h/dia (44h/semana)</option>
+                        <option value="parcial">Parcial (até 30h/semana)</option>
+                        <option value="12x36">12x36</option>
+                        <option value="noturna">Noturna</option>
+                        <option value="turnos_ininterruptos">Turnos Ininterruptos</option>
+                        <option value="banco_horas">Banco de Horas</option>
+                        <option value="teletrabalho">Teletrabalho</option>
+                        <option value="autonomo_pj_jornada">Autônomo/PJ</option>
+                        <option value="outra_jornada">Outra</option>
+                    </select>
+                    <span class="validation-icon" id="tipo_jornada_icon"></span>
+                </div>
+                <div class="form-group" id="carga_horaria_semanal_group" style="display:none;">
+                    <label for="carga_horaria_semanal" class="form-label">
+                        Carga Horária Semanal (horas):
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Este campo será preenchido automaticamente com base no tipo de jornada selecionado.</span>
+                        </span>
+                    </label>
+                    <input type="text" id="carga_horaria_semanal" name="carga_horaria_semanal" class="form-input" readonly>
+                    <span class="validation-icon" id="carga_horaria_semanal_icon"></span>
+                </div>
+                <div class="form-group">
+                    <label for="jornada_personalizada" class="form-label">
+                        Outra Jornada (especificar):
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Se a sua jornada não se encaixa nas opções, descreva-a aqui.</span>
+                        </span>
+                    </label>
+                    <input type="text" id="jornada_personalizada" name="jornada_personalizada" class="form-input">
+                    <span class="validation-icon" id="jornada_personalizada_icon"></span>
+                </div>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="horario_inicio" class="form-label">
+                            Horário Regular: Das
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Horário de início da sua jornada de trabalho diária.</span>
+                            </span>
+                        </label>
+                        <input type="time" id="horario_inicio" name="horario_inicio" class="form-input" required>
+                        <span class="validation-icon" id="horario_inicio_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="horario_fim" class="form-label">
+                            às
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Horário de término da sua jornada de trabalho diária.</span>
+                            </span>
+                        </label>
+                        <input type="time" id="horario_fim" name="horario_fim" class="form-input" required>
+                        <span class="validation-icon" id="horario_fim_icon"></span>
+                    </div>
+                </div>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="intervalo_inicio" class="form-label">
+                            Intervalo Obrigatório: Das
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Horário de início do seu intervalo para descanso/refeição.</span>
+                            </span>
+                        </label>
+                        <input type="time" id="intervalo_inicio" name="intervalo_inicio" class="form-input">
+                        <span class="validation-icon" id="intervalo_inicio_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="intervalo_fim" class="form-label">
+                            às
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Horário de término do seu intervalo para descanso/refeição.</span>
+                            </span>
+                        </label>
+                        <input type="time" id="intervalo_fim" name="intervalo_fim" class="form-input">
+                        <span class="validation-icon" id="intervalo_fim_icon"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dias_trabalho" class="form-label">
+                        Dias de Trabalho:
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Selecione os dias da semana em que você trabalha.</span>
+                        </span>
+                    </label>
+                    <select id="dias_trabalho" name="dias_trabalho" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option value="seg_sex">Segunda a Sexta</option><option value="seg_sab">Segunda a Sábado</option><option value="plantao">Plantão</option><option value="escala">Escala</option><option value="outros_dias">Outros</option>
+                    </select>
+                    <span class="validation-icon" id="dias_trabalho_icon"></span>
+                </div>
+            </section>
+
+            <section id="step-4" class="form-section">
+                <h2 class="form-section-title">DESVIO DE FUNÇÃO</h2>
+                <div class="form-group">
+                    <label for="desvio_funcao_sim_nao" class="form-label">
+                        Você já exerceu ou exerce funções diferentes daquelas para as quais foi contratado(a)?
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Selecione "SIM" se você realizou tarefas fora do seu contrato, "NÃO" caso contrário.</span>
+                        </span>
+                    </label>
+                    <select id="desvio_funcao_sim_nao" name="desvio_funcao_sim_nao" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option value="sim">SIM</option>
+                        <option value="nao">NÃO</option>
+                    </select>
+                    <span class="validation-icon" id="desvio_funcao_sim_nao_icon"></span>
+                </div>
+
+                <div id="desvio_funcao_questions" style="display:none;">
+                    <div class="form-group">
+                        <label for="descricao_funcao_contratada" class="form-label">
+                            Descrição da função para a qual foi contratado(a):
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Descreva as atividades que constam em seu contrato de trabalho.</span>
+                            </span>
+                        </label>
+                        <textarea id="descricao_funcao_contratada" name="descricao_funcao_contratada" rows="3" class="form-textarea"></textarea>
+                        <span class="validation-icon" id="descricao_funcao_contratada_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao_funcao_exercida" class="form-label">
+                            Descrição da(s) função(ões) que você realmente exercia:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Detalhe as atividades que você realmente realizava na prática.</span>
+                            </span>
+                        </label>
+                        <textarea id="descricao_funcao_exercida" name="descricao_funcao_exercida" rows="3" class="form-textarea"></textarea>
+                        <span class="validation-icon" id="descricao_funcao_exercida_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="periodo_desvio_funcao" class="form-label">
+                            Por qual período exerceu essa(s) função(ões) desviada(s)?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Informe o período (início e fim, se houver) em que você exerceu funções diferentes.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="periodo_desvio_funcao" name="periodo_desvio_funcao" placeholder="Ex: De MM/AAAA a MM/AAAA ou Desde MM/AAAA" class="form-input">
+                        <span class="validation-icon" id="periodo_desvio_funcao_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="solicitou_regularizacao" class="form-label">
+                            Você solicitou a regularização ou aumento salarial por essas funções?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Você pediu formalmente ou informalmente para que sua situação fosse regularizada?</span>
+                            </span>
+                        </label>
+                        <select id="solicitou_regularizacao" name="solicitou_regularizacao" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="sim">SIM</option>
+                            <option value="nao">NÃO</option>
+                            <option value="nao_lembro">NÃO ME LEMBRO</option>
+                        </select>
+                        <span class="validation-icon" id="solicitou_regularizacao_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="documentos_comprovacao" class="form-label">
+                            Possui documentos que comprovem o desvio de função (e-mails, mensagens, fotos, etc.)?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Se sim, prepare estes documentos para análise.</span>
+                            </span>
+                        </label>
+                        <input type="file" id="documentos_comprovacao" name="documentos_comprovacao" class="form-input" multiple>
+                        <span class="validation-icon" id="documentos_comprovacao_icon"></span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-5" class="form-section">
+                <h2 class="form-section-title">JORNADA DE TRABALHO E HORAS EXTRAS</h2>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="jornada_horario_inicio_prefilled" class="form-label">
+                            Horário Regular: Das
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Horário de início da sua jornada (preenchido da seção Contrato de Trabalho).</span>
+                            </span>
+                        </label>
+                        <input type="time" id="jornada_horario_inicio_prefilled" name="jornada_horario_inicio_prefilled" class="form-input" readonly>
+                        <span class="validation-icon" id="jornada_horario_inicio_prefilled_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="jornada_horario_fim_prefilled" class="form-label">
+                            às
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Horário de término da sua jornada (preenchido da seção Contrato de Trabalho).</span>
+                            </span>
+                        </label>
+                        <input type="time" id="jornada_horario_fim_prefilled" name="jornada_horario_fim_prefilled" class="form-input" readonly>
+                        <span class="validation-icon" id="jornada_horario_fim_prefilled_icon"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fazia_horas_extras" class="form-label">
+                        Você fazia horas extras habitualmente?
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Selecione "SIM" se você realizava horas extras com frequência, "NÃO" caso contrário.</span>
+                        </span>
+                    </label>
+                    <select id="fazia_horas_extras" name="fazia_horas_extras" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option value="sim">SIM</option>
+                        <option value="nao">NÃO</option>
+                    </select>
+                    <span class="validation-icon" id="fazia_horas_extras_icon"></span>
+                </div>
+                <div id="horas_extras_questions" style="display:none;">
+                    <div class="form-group">
+                        <label for="quantidade_horas_extras" class="form-label">
+                            Em média, quantas horas extras por dia/semana?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Informe a quantidade média de horas extras que você fazia.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="quantidade_horas_extras" name="quantidade_horas_extras" placeholder="Ex: 2h/dia ou 10h/semana" class="form-input">
+                        <span class="validation-icon" id="quantidade_horas_extras_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="recebia_horas_extras" class="form-label">
+                            Recebia pelas horas extras?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Selecione "SIM" se recebia o pagamento correto, "NÃO" se não recebia ou "PARCIALMENTE" se recebia menos.</span>
+                            </span>
+                        </label>
+                        <select id="recebia_horas_extras" name="recebia_horas_extras" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="sim">SIM</option>
+                            <option value="nao">NÃO</option>
+                            <option value="parcialmente">PARCIALMENTE</option>
+                        </select>
+                        <span class="validation-icon" id="recebia_horas_extras_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="compensacao_horas_extras" class="form-label">
+                            Se não recebia, havia compensação em banco de horas ou folga?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Se suas horas extras não eram pagas, elas eram compensadas de alguma forma?</span>
+                            </span>
+                        </label>
+                        <select id="compensacao_horas_extras" name="compensacao_horas_extras" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="sim">SIM</option>
+                            <option value="nao">NÃO</option>
+                        </select>
+                        <span class="validation-icon" id="compensacao_horas_extras_icon"></span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-6" class="form-section">
+                <h2 class="form-section-title">INTERVALOS E DESCANSOS</h2>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="intervalo_inicio_prefilled" class="form-label">
+                            Intervalo Obrigatório: Das
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Horário de início do seu intervalo (preenchido da seção Contrato de Trabalho).</span>
+                            </span>
+                        </label>
+                        <input type="time" id="intervalo_inicio_prefilled" name="intervalo_inicio_prefilled" class="form-input" readonly>
+                        <span class="validation-icon" id="intervalo_inicio_prefilled_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="intervalo_fim_prefilled" class="form-label">
+                            às
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Horário de término do seu intervalo (preenchido da seção Contrato de Trabalho).</span>
+                            </span>
+                        </label>
+                        <input type="time" id="intervalo_fim_prefilled" name="intervalo_fim_prefilled" class="form-input" readonly>
+                        <span class="validation-icon" id="intervalo_fim_prefilled_icon"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tirava_intervalo" class="form-label">
+                        Você tirava seu intervalo de descanso/refeição integralmente?
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Selecione "SIM" se você gozava do intervalo completo, "NÃO" se não gozava.</span>
+                        </span>
+                    </label>
+                    <select id="tirava_intervalo" name="tirava_intervalo" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option value="sim">SIM</option>
+                        <option value="nao">NÃO</option>
+                        <option value="parcialmente">PARCIALMENTE</option>
+                    </select>
+                    <span class="validation-icon" id="tirava_intervalo_icon"></span>
+                </div>
+                <div id="intervalo_questions" style="display:none;">
+                    <div class="form-group">
+                        <label for="motivo_nao_intervalo" class="form-label">
+                            Qual o motivo de não tirar o intervalo integralmente?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Descreva por que você não conseguia tirar o intervalo completo.</span>
+                            </span>
+                        </label>
+                        <textarea id="motivo_nao_intervalo" name="motivo_nao_intervalo" rows="3" class="form-textarea"></textarea>
+                        <span class="validation-icon" id="motivo_nao_intervalo_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="folgas_feriados_trabalhados" class="form-label">
+                            Trabalhava em folgas, feriados ou domingos?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Selecione "SIM" se você trabalhava em dias de folga, feriados ou domingos.</span>
+                            </span>
+                        </label>
+                        <select id="folgas_feriados_trabalhados" name="folgas_feriados_trabalhados" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="sim">SIM</option>
+                            <option value="nao">NÃO</option>
+                        </select>
+                        <span class="validation-icon" id="folgas_feriados_trabalhados_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="recebia_folgas_feriados" class="form-label">
+                            Recebia pagamento em dobro ou folga compensatória?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Se sim, descreva como era a compensação.</span>
+                            </span>
+                        </label>
+                        <select id="recebia_folgas_feriados" name="recebia_folgas_feriados" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="sim">SIM</option>
+                            <option value="nao">NÃO</option>
+                        </select>
+                        <span class="validation-icon" id="recebia_folgas_feriados_icon"></span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-7" class="form-section">
+                <h2 class="form-section-title">QUESTÕES ESPECIAIS</h2>
+                <div class="form-group">
+                    <label for="afastado_inss" class="form-label">
+                        Você já ficou afastado(a) pelo INSS (Auxílio-Doença, Acidente de Trabalho, etc.)?
+                        <span class="tooltip-container">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Selecione "SIM" se você já teve algum afastamento coberto pelo INSS.</span>
+                        </span>
+                    </label>
+                    <select id="afastado_inss" name="afastado_inss" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option value="sim">SIM</option>
+                        <option value="nao">NÃO</option>
+                    </select>
+                    <span class="validation-icon" id="afastado_inss_icon"></span>
+                </div>
+
+                <div id="inss_sub_questions" style="display:none;">
+                    <h3>Informações sobre Afastamento INSS:</h3>
+                    <div class="form-group">
+                        <label for="inss_ultimo_dia_trabalhado" class="form-label">
+                            Qual foi o último dia trabalhado (D.U.T.)?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Data do último dia em que você trabalhou antes do afastamento.</span>
+                            </span>
+                        </label>
+                        <input type="date" id="inss_ultimo_dia_trabalhado" name="inss_ultimo_dia_trabalhado" class="form-input">
+                        <span class="validation-icon" id="inss_ultimo_dia_trabalhado_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_periodo_repouso_estimado" class="form-label">
+                            O período estimado de repouso necessário:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Período de afastamento recomendado pelo médico.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="inss_periodo_repouso_estimado" name="inss_periodo_repouso_estimado" placeholder="Ex: 30 dias, 6 meses" class="form-input">
+                        <span class="validation-icon" id="inss_periodo_repouso_estimado_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_documento_medico_contem" class="form-label">
+                            O documento do médico contém:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Verifique se o atestado médico possui assinatura, carimbo e número de registro do profissional.</span>
+                            </span>
+                        </label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="doc_medico_assinatura_carimbo" name="doc_medico_assinatura_carimbo" value="sim">
+                                <label for="doc_medico_assinatura_carimbo">Assinatura e carimbo do profissional com CRM, CRO ou RMS (A assinatura pode ser eletrônica)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="doc_medico_informacoes_doenca" name="doc_medico_informacoes_doenca" value="sim">
+                                <label for="doc_medico_informacoes_doenca">As informações sobre a doença ou CID</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Informações sobre o Benefício Requerido:</h3>
+                    <div class="form-group">
+                        <label for="inss_tipo_beneficio" class="form-label">
+                            Tipo de benefício solicitado:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Selecione o tipo de benefício do INSS que foi solicitado.</span>
+                            </span>
+                        </label>
+                        <select id="inss_tipo_beneficio" name="inss_tipo_beneficio" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="auxilio_doenca_acidentario">Auxílio-doença acidentário (B91)</option>
+                            <option value="auxilio_doenca_comum">Auxílio-doença comum</option>
+                            <option value="outro_beneficio">Outro</option>
+                        </select>
+                        <span class="validation-icon" id="inss_tipo_beneficio_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_data_inicio_incapacidade" class="form-label">
+                            Data de início da incapacidade (primeiro dia de incapacidade para o trabalho):
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Data em que a incapacidade para o trabalho começou.</span>
+                            </span>
+                        </label>
+                        <input type="date" id="inss_data_inicio_incapacidade" name="inss_data_inicio_incapacidade" class="form-input">
+                        <span class="validation-icon" id="inss_data_inicio_incapacidade_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_incapacidade_permanente_temporaria" class="form-label">
+                            Se a incapacidade é permanente ou temporária:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Indique se a sua incapacidade é permanente ou se tem previsão de melhora.</span>
+                            </span>
+                        </label>
+                        <select id="inss_incapacidade_permanente_temporaria" name="inss_incapacidade_permanente_temporaria" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="permanente">Permanente</option>
+                            <option value="temporaria">Temporária</option>
+                        </select>
+                        <span class="validation-icon" id="inss_incapacidade_permanente_temporaria_icon"></span>
+                    </div>
+                    <div class="form-group" id="inss_acidente_trabalho_date_group" style="display:none;">
+                        <label for="inss_data_acidente_trabalho" class="form-label">
+                            Data do acidente de trabalho (para benefícios relacionados a acidente de trabalho):
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Data em que o acidente de trabalho ocorreu.</span>
+                            </span>
+                        </label>
+                        <input type="date" id="inss_data_acidente_trabalho" name="inss_data_acidente_trabalho" class="form-input">
+                        <span class="validation-icon" id="inss_data_acidente_trabalho_icon"></span>
+                    </div>
+                    <div class="form-group" id="inss_acidente_trabalho_desc_group" style="display:none;">
+                        <label for="inss_descricao_acidente_trabalho" class="form-label">
+                            Descrição do acidente de trabalho: Como ocorreu o acidente? Onde ocorreu? Quais as consequências do acidente?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Descreva detalhadamente como, onde e quais foram as consequências do acidente.</span>
+                            </span>
+                        </label>
+                        <textarea id="inss_descricao_acidente_trabalho" name="inss_descricao_acidente_trabalho" rows="3" class="form-textarea"></textarea>
+                        <span class="validation-icon" id="inss_descricao_acidente_trabalho_icon"></span>
+                    </div>
+                    <div class="form-group" id="inss_cat_group" style="display:none;">
+                        <label for="inss_existencia_cat" class="form-label">
+                            Existência de registro de acidente de trabalho (CAT - Comunicação de Acidente de Trabalho): O acidente foi registrado por meio da CAT? Se sim, apresentar o número.
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Informe se a Comunicação de Acidente de Trabalho (CAT) foi registrada e, se sim, qual o número.</span>
+                            </span>
+                        </label>
+                        <select id="inss_existencia_cat" name="inss_existencia_cat" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="sim">SIM</option>
+                            <option value="nao">NÃO</option>
+                        </select>
+                        <span class="validation-icon" id="inss_existencia_cat_icon"></span>
+                    </div>
+                    <div class="form-group" id="inss_cat_number_group" style="display:none;">
+                        <label for="inss_numero_cat" class="form-label">
+                            Número da CAT:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Se a CAT foi registrada, informe o número.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="inss_numero_cat" name="inss_numero_cat" class="form-input">
+                        <span class="validation-icon" id="inss_numero_cat_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_pedido_beneficio_anterior" class="form-label">
+                            Se já houve algum pedido de benefício anterior relacionado ao acidente ou à doença:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Você já solicitou algum benefício ao INSS por este mesmo problema de saúde?</span>
+                            </span>
+                        </label>
+                        <select id="inss_pedido_beneficio_anterior" name="inss_pedido_beneficio_anterior" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="sim">SIM</option>
+                            <option value="nao">NÃO</option>
+                        </select>
+                        <span class="validation-icon" id="inss_pedido_beneficio_anterior_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_afastamento_anterior" class="form-label">
+                            Se houve afastamento anterior relacionado ao mesmo problema de saúde (doença ou acidente):
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Você já se afastou do trabalho anteriormente devido ao mesmo problema de saúde?</span>
+                            </span>
+                        </label>
+                        <select id="inss_afastamento_anterior" name="inss_afastamento_anterior" class="form-select">
+                            <option value="">Selecione</option>
+                            <option value="sim">SIM</option>
+                            <option value="nao">NÃO</option>
+                        </select>
+                        <span class="validation-icon" id="inss_afastamento_anterior_icon"></span>
+                    </div>
+
+                    <h3>Informações sobre o Trabalho e a Atividade Exercida:</h3>
+                    <div class="form-group">
+                        <label for="inss_funcao_exercida" class="form-label">
+                            Função exercida no momento do acidente ou início da incapacidade:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Seu cargo ou função no momento em que a incapacidade começou.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="inss_funcao_exercida" name="inss_funcao_exercida" class="form-input">
+                        <span class="validation-icon" id="inss_funcao_exercida_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_atividade_realizada" class="form-label">
+                            Atividade realizada no momento do acidente (detalhamento das tarefas e responsabilidades):
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Descreva as tarefas e responsabilidades que você estava executando no momento do acidente.</span>
+                            </span>
+                        </label>
+                        <textarea id="inss_atividade_realizada" name="inss_atividade_realizada" rows="3" class="form-textarea"></textarea>
+                        <span class="validation-icon" id="inss_atividade_realizada_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_empregador" class="form-label">
+                            Empregador/empresa em que o requerente trabalhava na data do acidente ou início da incapacidade:
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Nome da empresa em que você trabalhava quando a incapacidade começou.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="inss_empregador" name="inss_empregador" class="form-input">
+                        <span class="validation-icon" id="inss_empregador_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_dias_afastamento" class="form-label">
+                            Número de dias de afastamento do trabalho: Quanto tempo o trabalhador ficou afastado após o acidente ou início da incapacidade?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Informe o total de dias que você ficou afastado do trabalho.</span>
+                            </span>
+                        </label>
+                        <input type="number" id="inss_dias_afastamento" name="inss_dias_afastamento" class="form-input" min="0">
+                        <span class="validation-icon" id="inss_dias_afastamento_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_medidas_seguranca" class="form-label">
+                            Adoção de medidas de segurança e prevenção: O trabalhador usava Equipamento de Proteção Individual (EPI) no momento do acidente? Houve falha na segurança do trabalho?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Descreva sobre o uso de EPIs e se houve falhas de segurança no momento do acidente.</span>
+                            </span>
+                        </label>
+                        <textarea id="inss_medidas_seguranca" name="inss_medidas_seguranca" rows="3" class="form-textarea"></textarea>
+                        <span class="validation-icon" id="inss_medidas_seguranca_icon"></span>
+                    </div>
+
+                    <h3>Informações Médicas e de Saúde:</h3>
+                    <div class="form-group">
+                        <label for="inss_doenca_lesao" class="form-label">
+                            Doença ou lesão resultante do acidente de trabalho: Qual a condição de saúde diagnosticada?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Descreva a doença ou lesão diagnosticada decorrente do acidente ou condição de saúde.</span>
+                            </span>
+                        </label>
+                        <textarea id="inss_doenca_lesao" name="inss_doenca_lesao" rows="3" class="form-textarea"></textarea>
+                        <span class="validation-icon" id="inss_doenca_lesao_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_laudos_medicos" class="form-label">
+                            Laudos médicos: O INSS solicitará laudos e exames que comprovem a incapacidade temporária para o trabalho. Isso inclui os laudos médicos de hospitais ou médicos que trataram o acidente ou a doença.
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Liste os laudos e exames médicos que comprovam sua incapacidade.</span>
+                            </span>
+                        </label>
+                        <textarea id="inss_laudos_medicos" name="inss_laudos_medicos" rows="3" class="form-textarea"></textarea>
+                        <span class="validation-icon" id="inss_laudos_medicos_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_historico_tratamento" class="form-label">
+                            Histórico de tratamento: O trabalhador recebeu algum tipo de tratamento médico após o acidente ou durante o afastamento?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Descreva os tratamentos médicos que você recebeu.</span>
+                            </span>
+                        </label>
+                        <textarea id="inss_historico_tratamento" name="inss_historico_tratamento" rows="3" class="form-textarea"></textarea>
+                        <span class="validation-icon" id="inss_historico_tratamento_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_codigos_cid" class="form-label">
+                            Códigos de CID (Classificação Internacional de Doenças): O trabalhador deve fornecer o código da doença ou lesão, que pode ser incluído no laudo médico.
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Informe os códigos CID relacionados à sua doença ou lesão, se souber.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="inss_codigos_cid" name="inss_codigos_cid" class="form-input">
+                        <span class="validation-icon" id="inss_codigos_cid_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_capacidade_laborativa" class="form-label">
+                            Capacidade para exercer atividades laborativas: O médico do INSS ou o médico assistente precisa determinar se o trabalhador tem condições de retornar ao trabalho ou se a incapacidade persiste.
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Qual a avaliação médica sobre sua capacidade de retornar ao trabalho?</span>
+                            </span>
+                        </label>
+                        <textarea id="inss_capacidade_laborativa" name="inss_capacidade_laborativa" rows="3" class="form-textarea"></textarea>
+                        <span class="validation-icon" id="inss_capacidade_laborativa_icon"></span>
+                    </div>
+
+                    <h3 id="inss_detalhes_acidente_title" style="display:none;">Detalhamento do Acidente de Trabalho:</h3>
+                    <div id="inss_detalhes_acidente_questions" style="display:none;">
+                        <div class="form-group">
+                            <label for="inss_descricao_detalhada_acidente" class="form-label">
+                                Descrição detalhada do acidente: Como e quando o acidente ocorreu?
+                                <span class="tooltip-container">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Detalhe como e quando o acidente ocorreu.</span>
+                                </span>
+                            </label>
+                            <textarea id="inss_descricao_detalhada_acidente" name="inss_descricao_detalhada_acidente" rows="3" class="form-textarea"></textarea>
+                            <span class="validation-icon" id="inss_descricao_detalhada_acidente_icon"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="inss_local_acidente" class="form-label">
+                                Local do acidente: Onde o acidente aconteceu (na empresa, no trajeto entre a residência e o trabalho, etc.)?
+                                <span class="tooltip-container">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Informe o local exato onde o acidente de trabalho aconteceu.</span>
+                                </span>
+                            </label>
+                            <input type="text" id="inss_local_acidente" name="inss_local_acidente" class="form-input">
+                            <span class="validation-icon" id="inss_local_acidente_icon"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="inss_causas_acidente" class="form-label">
+                                Causas do acidente: Foi uma falha na empresa, em equipamentos ou por culpa do trabalhador?
+                                <span class="tooltip-container">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Descreva as possíveis causas do acidente.</span>
+                                </span>
+                            </label>
+                            <textarea id="inss_causas_acidente" name="inss_causas_acidente" rows="3" class="form-textarea"></textarea>
+                            <span class="validation-icon" id="inss_causas_acidente_icon"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="inss_tipo_lesao" class="form-label">
+                                Tipo de lesão ou dano causado: O que foi afetado pelo acidente (ossos, tecidos, órgãos, etc.)?
+                                <span class="tooltip-container">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Descreva a natureza da lesão causada pelo acidente.</span>
+                                </span>
+                            </label>
+                            <textarea id="inss_tipo_lesao" name="inss_tipo_lesao" rows="3" class="form-textarea"></textarea>
+                            <span class="validation-icon" id="inss_tipo_lesao_icon"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="inss_tratamento_imediato" class="form-label">
+                                Se houve tratamento médico imediato: O trabalhador foi imediatamente atendido após o acidente? Onde ocorreu o atendimento?
+                                <span class="tooltip-container">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Informe se você recebeu atendimento médico logo após o acidente e onde.</span>
+                                </span>
+                            </label>
+                            <textarea id="inss_tratamento_imediato" name="inss_tratamento_imediato" rows="3" class="form-textarea"></textarea>
+                            <span class="validation-icon" id="inss_tratamento_imediato_icon"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="inss_sequelas" class="form-label">
+                                Se há sequelas do acidente: O acidente resultou em sequelas permanentes?
+                                <span class="tooltip-container">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Indique se o acidente deixou alguma sequela permanente.</span>
+                                </span>
+                            </label>
+                            <select id="inss_sequelas" name="inss_sequelas" class="form-select">
+                                <option value="">Selecione</option>
+                                <option value="sim">SIM</option>
+                                <option value="nao">NÃO</option>
+                            </select>
+                            <span class="validation-icon" id="inss_sequelas_icon"></span>
+                        </div>
+                    </div>
+
+                    <h3>Histórico de Contribuições ao INSS:</h3>
+                    <div class="form-group">
+                        <label for="inss_tempo_contribuicao" class="form-label">
+                            Tempo de contribuição: O trabalhador possui contribuições suficientes para ter direito ao benefício?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Informe seu tempo total de contribuição ao INSS.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="inss_tempo_contribuicao" name="inss_tempo_contribuicao" placeholder="Ex: 5 anos, 3 meses" class="form-input">
+                        <span class="validation-icon" id="inss_tempo_contribuicao_icon"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inss_ultima_contribuicao" class="form-label">
+                            Qual a última contribuição realizada antes do acidente ou início da incapacidade?
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Data da sua última contribuição ao INSS antes do problema de saúde.</span>
+                            </span>
+                        </label>
+                        <input type="date" id="inss_ultima_contribuicao" name="inss_ultima_contribuicao" class="form-input">
+                        <span class="validation-icon" id="inss_ultima_contribuicao_icon"></span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-8" class="form-section">
+                <h2 class="form-section-title">TESTEMUNHAS</h2>
+                <div class="form-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="no_witnesses" name="no_witnesses" value="sim">
+                        <label for="no_witnesses" class="form-label">NÃO TENHO TESTEMUNHAS</label>
+                    </div>
+                </div>
+                <div id="witness_details_group">
+                    <p class="text-gray-700 mb-4">Caso possua, forneça os dados da(s) testemunha(s) que presenciaram os fatos:</p>
+                    <div class="witness-block border p-4 rounded-lg mb-4">
+                        <h3 class="font-semibold text-lg mb-2">Testemunha 1</h3>
+                        <div class="form-group">
+                            <label for="testemunha1_nome" class="form-label">
+                                Nome Completo:
+                                <span class="tooltip-container">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Nome completo da primeira testemunha.</span>
+                                </span>
+                            </label>
+                            <input type="text" id="testemunha1_nome" name="testemunha1_nome" class="form-input">
+                            <span class="validation-icon" id="testemunha1_nome_icon"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="testemunha1_cpf" class="form-label">
+                                CPF:
+                                <span class="tooltip-container">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">CPF da primeira testemunha.</span>
+                                </span>
+                            </label>
+                            <input type="text" id="testemunha1_cpf" name="testemunha1_cpf" placeholder="000.000.000-00" class="form-input mask-cpf">
+                            <span class="validation-icon" id="testemunha1_cpf_icon"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="testemunha1_telefone" class="form-label">
+                                Telefone:
+                                <span class="tooltip-container">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltip-text">Telefone da primeira testemunha, com DDD.</span>
+                                </span>
+                            </label>
+                            <input type="tel" id="testemunha1_telefone" name="testemunha1_telefone" placeholder="(DD) 9XXXX-XXXX" class="form-input mask-phone">
+                            <span class="validation-icon" id="testemunha1_telefone_icon"></span>
+                        </div>
+                    </div>
+
+                    <div class="witness-block border p-4 rounded-lg mb-4">
+                        <h3 class="font-semibold text-lg mb-2">Testemunha 2</h3>
+                        <div class="form-group">
+                            <label for="testemunha2_nome" class="form-label">Nome Completo:</label>
+                            <input type="text" id="testemunha2_nome" name="testemunha2_nome" class="form-input">
+                            <span class="validation-icon" id="testemunha2_nome_icon"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="testemunha2_cpf" class="form-label">CPF:</label>
+                            <input type="text" id="testemunha2_cpf" name="testemunha2_cpf" placeholder="000.000.000-00" class="form-input mask-cpf">
+                            <span class="validation-icon" id="testemunha2_cpf_icon"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="testemunha2_telefone" class="form-label">Telefone:</label>
+                            <input type="tel" id="testemunha2_telefone" name="testemunha2_telefone" placeholder="(DD) 9XXXX-XXXX" class="form-input mask-phone">
+                            <span class="validation-icon" id="testemunha2_telefone_icon"></span>
+                        </div>
+                    </div>
+
+                    </div>
+            </section>
+
+            <section id="step-9" class="form-section">
+                <h2 class="form-section-title">DOCUMENTOS QUE O CLIENTE PODE ENVIAR</h2>
+                <p class="text-gray-700 mb-4">Para darmos andamento ao seu caso, por favor, prepare os seguintes documentos, se os possuir:</p>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li>Documento de identidade (RG, CNH)</li>
+                    <li>CPF</li>
+                    <li>Comprovante de residência atualizado</li>
+                    <li>Carteira de Trabalho (CTPS) - Páginas de identificação, contrato de trabalho, anotações de férias e salário</li>
+                    <li>Holerites/Recibos de pagamento (dos últimos 12 meses, se possível)</li>
+                    <li>Extrato do FGTS</li>
+                    <li>Extrato ou chave de saque do PIS/PASEP</li>
+                    <li>Termo de Rescisão de Contrato de Trabalho (TRCT) e Comprovante de Seguro-Desemprego (se aplicável)</li>
+                    <li>Atestados médicos e laudos (especialmente se relacionado a afastamento ou doença)</li>
+                    <li>Comunicação de Acidente de Trabalho (CAT) - se aplicável</li>
+                    <li>Documentos que comprovem desvio de função (e-mails, mensagens, fotos, etc.) - se aplicável</li>
+                    <li>Outros documentos relevantes ao seu caso (como registros de ponto, correspondências da empresa, etc.)</li>
+                </ul>
+                <div class="form-group mt-6">
+                    <label for="documentos_anexo" class="form-label">Anexar Documentos (opcional):</label>
+                    <input type="file" id="documentos_anexo" name="documentos_anexo" class="form-input" multiple>
+                    <span class="validation-icon" id="documentos_anexo_icon"></span>
+                </div>
+            </section>
+
+            <section id="step-10" class="form-section">
+                <h2 class="form-section-title">FINALIZAÇÃO</h2>
+                <div class="form-group text-center">
+                    <p class="text-gray-700 text-lg mb-6">
+                        Você está quase lá! Ao clicar em "Enviar Formulário", suas informações serão enviadas para a análise de nossa equipe jurídica.
+                        Agradecemos por preencher o formulário. Entraremos em contato em breve!
+                    </p>
+                </div>
+                <div id="selfieContainer" class="mb-6">
+                    <label class="form-label">Tirar Selfie (Opcional):</label>
+                    <video id="selfieVideo" autoplay style="display:none;"></video>
+                    <canvas id="selfieCanvas" style="display:none;"></canvas>
+                    <input type="hidden" id="selfieDataInput" name="selfie_data">
+                    <div class="flex justify-center space-x-4 mt-4">
+                        <button type="button" id="takeSelfieBtn" class="btn btn-primary"><i class="fas fa-camera mr-2"></i>Tirar Selfie</button>
+                        <input type="file" id="uploadSelfieInput" accept="image/*" style="display:none;">
+                        <button type="button" id="uploadSelfieBtn" class="btn btn-secondary"><i class="fas fa-upload mr-2"></i>Escolher Arquivo</button>
+                        <button type="button" id="retakeSelfieBtn" class="btn btn-secondary hidden"><i class="fas fa-redo mr-2"></i>Retirar Selfie</button>
+                    </div>
+                </div>
+            </section>
+
+            <div class="navigation-buttons">
+                <button type="button" id="prevBtn" class="btn btn-secondary"><i class="fas fa-arrow-left mr-2"></i>Voltar</button>
+                <button type="button" id="nextBtn" class="btn btn-primary">Próximo<i class="fas fa-arrow-right ml-2"></i></button>
+                <button type="submit" id="submitBtn" class="btn btn-submit hidden">Enviar Formulário<i class="fas fa-paper-plane ml-2"></i></button>
+            </div>
+        </form>
+    </div>
+
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="modal-title text-green-600">Formulário Enviado com Sucesso!</h3>
+            <p class="modal-message">Agradecemos por preencher o formulário. Sua entrevista foi enviada para análise da nossa equipe jurídica. Entraremos em contato em breve!</p>
+            <div class="modal-buttons">
+                <button id="closeModalBtn" class="btn btn-primary">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sections = document.querySelectorAll('.form-section');
+        const progressBarFill = document.getElementById('progressBarFill');
+        const sectionIndicator = document.getElementById('sectionIndicator');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const laborForm = document.getElementById('laborForm');
+        const successModal = document.getElementById('successModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        let currentStep = 0;
+        const sectionTitles = [
+            "DADOS PESSOAIS DO CLIENTE",
+            "DADOS DA EMPRESA/EMPREGADOR",
+            "DADOS DO CONTRATO DE TRABALHO",
+            "DESVIO DE FUNÇÃO",
+            "JORNADA DE TRABALHO E HORAS EXTRAS",
+            "INTERVALOS E DESCANSOS",
+            "QUESTÕES ESPECIAIS",
+            "TESTEMUNHAS",
+            "DOCUMENTOS QUE O CLIENTE PODE ENVIAR",
+            "FINALIZAÇÃO"
+        ];
+
+        // Function to update progress bar and section indicator
+        function updateProgressBar() {
+            const progress = (currentStep / (sections.length - 1)) * 100;
+            progressBarFill.style.width = `${progress}%`;
+            
+            let indicatorText = "";
+            for (let i = 0; i <= currentStep; i++) {
+                indicatorText += sectionTitles[i];
+                if (i < currentStep) {
+                    indicatorText += " > ";
+                }
+            }
+            sectionIndicator.textContent = indicatorText;
+        }
+
+        // Function to show a specific section
+        function showSection(step) {
+            sections.forEach((section, index) => {
+                section.classList.remove('active');
+                if (index === step) {
+                    section.classList.add('active');
+                }
+            });
+            currentStep = step;
+            updateProgressBar();
+            updateNavigationButtons();
+            validateCurrentSectionRealTime(); // Setup real-time validation for the new active section
+        }
+
+        // Function to update navigation buttons visibility
+        function updateNavigationButtons() {
+            prevBtn.classList.toggle('hidden', currentStep === 0);
+            nextBtn.classList.toggle('hidden', currentStep === sections.length - 1);
+            submitBtn.classList.toggle('hidden', currentStep !== sections.length - 1);
+        }
+
+        // Function to validate fields in the current section
+        function validateCurrentSection() {
+            const currentSection = sections[currentStep];
+            const inputs = currentSection.querySelectorAll('input[required], select[required], textarea[required]');
+            let allValid = true;
+
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add('invalid', 'highlight-invalid');
+                    allValid = false;
+                } else {
+                    input.classList.remove('invalid', 'highlight-invalid');
+                    input.classList.add('valid'); // Mark valid fields
+                }
+            });
+            return allValid;
+        }
+
+        // Function to set up real-time validation for inputs in the current section
+        function validateCurrentSectionRealTime() {
+            const currentSection = sections[currentStep];
+            const inputs = currentSection.querySelectorAll('input, select, textarea');
+
+            inputs.forEach(input => {
+                // Clear previous validation listeners to avoid multiple attachments
+                input.removeEventListener('input', inputValidationHandler);
+                input.removeEventListener('change', inputValidationHandler);
+
+                input.addEventListener('input', inputValidationHandler);
+                input.addEventListener('change', inputValidationHandler); // For select and date inputs
+                // Initial validation check on load for fields that might be pre-filled or have default values
+                inputValidationHandler({ target: input });
+            });
+        }
+
+        // Handles validation for a single input
+        function inputValidationHandler(event) {
+            const input = event.target;
+            const iconId = input.id + '_icon';
+            const validationIcon = document.getElementById(iconId);
+
+            if (input.hasAttribute('required') && !input.value.trim()) {
+                input.classList.remove('valid');
+                input.classList.add('invalid', 'highlight-invalid');
+                if (validationIcon) {
+                    validationIcon.classList.remove('fa-check-circle', 'text-green-500');
+                    validationIcon.classList.add('fa-exclamation-circle', 'text-red-500');
+                }
+            } else {
+                input.classList.remove('invalid', 'highlight-invalid');
+                input.classList.add('valid');
+                if (validationIcon) {
+                    validationIcon.classList.remove('fa-exclamation-circle', 'text-red-500');
+                    validationIcon.classList.add('fa-check-circle', 'text-green-500');
+                }
+            }
+        }
+
+        // Navigation button event listeners
+        nextBtn.addEventListener('click', () => {
+            if (validateCurrentSection()) {
+                if (currentStep < sections.length - 1) {
+                    showSection(currentStep + 1);
+                }
+            } else {
+                alert('Por favor, preencha todos os campos obrigatórios para prosseguir.');
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                showSection(currentStep - 1);
+            }
+        });
+
+        // Form submission handler
+        laborForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (validateCurrentSection()) {
+                // In a real application, you would send the form data to a server here.
+                // For demonstration, we'll just show a success message.
+                // Example using fetch API (requires a backend to handle the data):
+                /*
+                const formData = new FormData(laborForm);
+                fetch('YOUR_BACKEND_ENDPOINT_FOR_EMAIL_SENDING', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        successModal.classList.add('show');
+                    } else {
+                        alert('Houve um erro ao enviar o formulário. Tente novamente.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Houve um erro de conexão. Tente novamente.');
+                });
+                */
+
+                // Simulate success for client-side demo
+                successModal.classList.add('show');
+                laborForm.reset(); // Clear form after "submission"
+                showSection(0); // Go back to the first step
+                stopCamera(); // Stop camera if active
+            } else {
+                alert('Por favor, preencha todos os campos obrigatórios antes de enviar o formulário.');
+            }
+        });
+
+        // Close modal
+        closeModalBtn.addEventListener('click', () => {
+            successModal.classList.remove('show');
+        });
+
+
+        // --- Specific Field Logics ---
+
+        // CEP Autofill (for client data)
+        const cepInput = document.getElementById('cep');
+        cepInput.addEventListener('blur', () => {
+            const cep = cepInput.value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('endereco_rua').value = data.logradouro;
+                            document.getElementById('nome_bairro').value = data.bairro;
+                            document.getElementById('nome_cidade').value = data.localidade;
+                            document.getElementById('nome_estado').value = data.uf;
+                            document.getElementById('numero_casa').classList.add('highlight-invalid'); // Highlight number field
+                            document.getElementById('numero_casa').focus(); // Focus on number field
+                            inputValidationHandler({ target: document.getElementById('endereco_rua') });
+                            inputValidationHandler({ target: document.getElementById('nome_bairro') });
+                            inputValidationHandler({ target: document.getElementById('nome_cidade') });
+                            inputValidationHandler({ target: document.getElementById('nome_estado') });
+                        } else {
+                            alert('CEP não encontrado.');
+                            cepInput.classList.add('invalid');
+                            inputValidationHandler({ target: cepInput });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar CEP:', error);
+                        alert('Erro ao buscar CEP. Verifique a conexão.');
+                        cepInput.classList.add('invalid');
+                        inputValidationHandler({ target: cepInput });
+                    });
+            } else {
+                cepInput.classList.add('invalid');
+                inputValidationHandler({ target: cepInput });
+            }
+        });
+
+        // CEP Autofill (for company data)
+        const cepEmpresaInput = document.getElementById('cep_empresa');
+        cepEmpresaInput.addEventListener('blur', () => {
+            const cep = cepEmpresaInput.value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('endereco_empresa_rua').value = data.logradouro;
+                            document.getElementById('bairro_empresa').value = data.bairro;
+                            document.getElementById('cidade_empresa').value = data.localidade;
+                            document.getElementById('estado_empresa').value = data.uf;
+                            document.getElementById('numero_empresa').classList.add('highlight-invalid'); // Highlight number field
+                            document.getElementById('numero_empresa').focus(); // Focus on number field
+                            inputValidationHandler({ target: document.getElementById('endereco_empresa_rua') });
+                            inputValidationHandler({ target: document.getElementById('bairro_empresa') });
+                            inputValidationHandler({ target: document.getElementById('cidade_empresa') });
+                            inputValidationHandler({ target: document.getElementById('estado_empresa') });
+                        } else {
+                            alert('CEP da empresa não encontrado.');
+                            cepEmpresaInput.classList.add('invalid');
+                            inputValidationHandler({ target: cepEmpresaInput });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar CEP da empresa:', error);
+                        alert('Erro ao buscar CEP da empresa. Verifique a conexão.');
+                        cepEmpresaInput.classList.add('invalid');
+                        inputValidationHandler({ target: cepEmpresaInput });
+                    });
+            } else {
+                cepEmpresaInput.classList.add('invalid');
+                inputValidationHandler({ target: cepEmpresaInput });
+            }
+        });
+
+        // Calculate time of employment
+        const dataAdmissaoInput = document.getElementById('data_admissao');
+        const dataDemissaoInput = document.getElementById('data_demissao');
+        const tempoRegistroP = document.getElementById('tempo_registro');
+
+        function calculateEmploymentTime() {
+            const admissao = new Date(dataAdmissaoInput.value);
+            const demissao = dataDemissaoInput.value ? new Date(dataDemissaoInput.value) : new Date(); // Use current date if not dismissed
+
+            if (isNaN(admissao.getTime())) {
+                tempoRegistroP.textContent = '';
+                return;
+            }
+
+            let years = demissao.getFullYear() - admissao.getFullYear();
+            let months = demissao.getMonth() - admissao.getMonth();
+            let days = demissao.getDate() - admissao.getDate();
+
+            if (days < 0) {
+                months--;
+                days += new Date(demissao.getFullYear(), demissao.getMonth(), 0).getDate(); // Days in previous month
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            let result = [];
+            if (years > 0) result.push(`${years} ano(s)`);
+            if (months > 0) result.push(`${months} mês(es)`);
+            if (days > 0) result.push(`${days} dia(s)`);
+
+            tempoRegistroP.textContent = `Tempo de registro: ${result.join(', ')}`;
+        }
+
+        dataAdmissaoInput.addEventListener('change', calculateEmploymentTime);
+        dataDemissaoInput.addEventListener('change', calculateEmploymentTime);
+
+        // Turno and Carga Horária Semanal Logic
+        const tipoJornadaSelect = document.getElementById('tipo_jornada');
+        const cargaHorariaSemanalGroup = document.getElementById('carga_horaria_semanal_group');
+        const cargaHorariaSemanalInput = document.getElementById('carga_horaria_semanal');
+
+        tipoJornadaSelect.addEventListener('change', () => {
+            const selectedJornada = tipoJornadaSelect.value;
+            let cargaHoraria = '';
+
+            switch (selectedJornada) {
+                case '8h_dia':
+                    cargaHoraria = '44 horas';
+                    cargaHorariaSemanalGroup.style.display = 'block';
+                    break;
+                case 'parcial':
+                    cargaHoraria = 'Até 30 horas';
+                    cargaHorariaSemanalGroup.style.display = 'block';
+                    break;
+                case '12x36':
+                    cargaHoraria = '36 horas (média)';
+                    cargaHorariaSemanalGroup.style.display = 'block';
+                    break;
+                case 'noturna':
+                    cargaHoraria = 'Conforme escala'; // Or calculate if specific hours provided
+                    cargaHorariaSemanalGroup.style.display = 'block';
+                    break;
+                case 'teletrabalho':
+                case 'autonomo_pj_jornada':
+                case 'outra_jornada':
+                    cargaHoraria = 'Variável / Não se aplica';
+                    cargaHorariaSemanalGroup.style.display = 'block';
+                    break;
+                case 'horario_comercial':
+                    cargaHoraria = '44 horas (geralmente)';
+                    cargaHorariaSemanalGroup.style.display = 'block';
+                    break;
+                case 'turno_tarde':
+                case 'turno_noite':
+                    cargaHoraria = 'Conforme escala';
+                    cargaHorariaSemanalGroup.style.display = 'block';
+                    break;
+                default:
+                    cargaHorariaSemanalGroup.style.display = 'none';
+                    break;
+            }
+            cargaHorariaSemanalInput.value = cargaHoraria;
+            inputValidationHandler({ target: cargaHorariaSemanalInput });
+        });
+
+
+        // Desvio de Função Logic
+        const desvioFuncaoSelect = document.getElementById('desvio_funcao_sim_nao');
+        const desvioFuncaoQuestions = document.getElementById('desvio_funcao_questions');
+
+        desvioFuncaoSelect.addEventListener('change', () => {
+            if (desvioFuncaoSelect.value === 'sim') {
+                desvioFuncaoQuestions.style.display = 'block';
+                desvioFuncaoQuestions.querySelectorAll('input, select, textarea').forEach(input => input.setAttribute('required', 'required'));
+            } else {
+                desvioFuncaoQuestions.style.display = 'none';
+                desvioFuncaoQuestions.querySelectorAll('input, select, textarea').forEach(input => {
+                    input.removeAttribute('required');
+                    input.value = ''; // Clear fields when hidden
+                    input.classList.remove('valid', 'invalid', 'highlight-invalid');
+                });
+            }
+        });
+
+        // Horas Extras Logic
+        const faziaHorasExtrasSelect = document.getElementById('fazia_horas_extras');
+        const horasExtrasQuestions = document.getElementById('horas_extras_questions');
+
+        faziaHorasExtrasSelect.addEventListener('change', () => {
+            if (faziaHorasExtrasSelect.value === 'sim') {
+                horasExtrasQuestions.style.display = 'block';
+                horasExtrasQuestions.querySelectorAll('input, select').forEach(input => input.setAttribute('required', 'required'));
+            } else {
+                horasExtrasQuestions.style.display = 'none';
+                horasExtrasQuestions.querySelectorAll('input, select').forEach(input => {
+                    input.removeAttribute('required');
+                    input.value = '';
+                    input.classList.remove('valid', 'invalid', 'highlight-invalid');
+                });
+            }
+        });
+
+        // Intervalo e Descansos Logic
+        const tiravaIntervaloSelect = document.getElementById('tirava_intervalo');
+        const intervaloQuestions = document.getElementById('intervalo_questions');
+
+        tiravaIntervaloSelect.addEventListener('change', () => {
+            if (tiravaIntervaloSelect.value === 'nao' || tiravaIntervaloSelect.value === 'parcialmente') {
+                intervaloQuestions.style.display = 'block';
+                document.getElementById('motivo_nao_intervalo').setAttribute('required', 'required');
+            } else {
+                intervaloQuestions.style.display = 'none';
+                document.getElementById('motivo_nao_intervalo').removeAttribute('required');
+                document.getElementById('motivo_nao_intervalo').value = '';
+                document.getElementById('motivo_nao_intervalo').classList.remove('valid', 'invalid', 'highlight-invalid');
+            }
+        });
+
+
+        // INSS Afastamento Logic
+        const afastadoInssSelect = document.getElementById('afastado_inss');
+        const inssSubQuestions = document.getElementById('inss_sub_questions');
+        const inssTipoBeneficioSelect = document.getElementById('inss_tipo_beneficio');
+        const inssAcidenteTrabalhoDateGroup = document.getElementById('inss_acidente_trabalho_date_group');
+        const inssAcidenteTrabalhoDescGroup = document.getElementById('inss_acidente_trabalho_desc_group');
+        const inssCatGroup = document.getElementById('inss_cat_group');
+        const inssCatNumberGroup = document.getElementById('inss_cat_number_group');
+        const inssExistenciaCatSelect = document.getElementById('inss_existencia_cat');
+        const inssDetalhesAcidenteTitle = document.getElementById('inss_detalhes_acidente_title');
+        const inssDetalhesAcidenteQuestions = document.getElementById('inss_detalhes_acidente_questions');
+
+
+        afastadoInssSelect.addEventListener('change', () => {
+            if (afastadoInssSelect.value === 'sim') {
+                inssSubQuestions.style.display = 'block';
+                inssSubQuestions.querySelectorAll('input, select, textarea').forEach(input => input.setAttribute('required', 'required'));
+                 // Only make CAT fields required if accident benefit is selected
+                 inssTipoBeneficioSelect.dispatchEvent(new Event('change'));
+            } else {
+                inssSubQuestions.style.display = 'none';
+                inssSubQuestions.querySelectorAll('input, select, textarea').forEach(input => {
+                    input.removeAttribute('required');
+                    input.value = '';
+                    input.checked = false; // For checkboxes
+                    input.classList.remove('valid', 'invalid', 'highlight-invalid');
+                });
+                inssAcidenteTrabalhoDateGroup.style.display = 'none';
+                inssAcidenteTrabalhoDescGroup.style.display = 'none';
+                inssCatGroup.style.display = 'none';
+                inssCatNumberGroup.style.display = 'none';
+                inssDetalhesAcidenteTitle.style.display = 'none';
+                inssDetalhesAcidenteQuestions.style.display = 'none';
+            }
+        });
+
+        inssTipoBeneficioSelect.addEventListener('change', () => {
+            if (inssTipoBeneficioSelect.value === 'auxilio_doenca_acidentario') {
+                inssAcidenteTrabalhoDateGroup.style.display = 'block';
+                inssAcidenteTrabalhoDescGroup.style.display = 'block';
+                inssCatGroup.style.display = 'block';
+                inssDetalhesAcidenteTitle.style.display = 'block';
+                inssDetalhesAcidenteQuestions.style.display = 'block';
+
+                document.getElementById('inss_data_acidente_trabalho').setAttribute('required', 'required');
+                document.getElementById('inss_descricao_acidente_trabalho').setAttribute('required', 'required');
+                document.getElementById('inss_existencia_cat').setAttribute('required', 'required');
+                inssDetalhesAcidenteQuestions.querySelectorAll('input, select, textarea').forEach(input => input.setAttribute('required', 'required'));
+
+            } else {
+                inssAcidenteTrabalhoDateGroup.style.display = 'none';
+                inssAcidenteTrabalhoDescGroup.style.display = 'none';
+                inssCatGroup.style.display = 'none';
+                inssCatNumberGroup.style.display = 'none'; // Ensure this is hidden too
+                inssDetalhesAcidenteTitle.style.display = 'none';
+                inssDetalhesAcidenteQuestions.style.display = 'none';
+
+                document.getElementById('inss_data_acidente_trabalho').removeAttribute('required');
+                document.getElementById('inss_descricao_acidente_trabalho').removeAttribute('required');
+                document.getElementById('inss_existencia_cat').removeAttribute('required');
+                document.getElementById('inss_numero_cat').removeAttribute('required'); // Remove required for CAT number too
+                inssDetalhesAcidenteQuestions.querySelectorAll('input, select, textarea').forEach(input => {
+                    input.removeAttribute('required');
+                    input.value = '';
+                    input.classList.remove('valid', 'invalid', 'highlight-invalid');
+                });
+            }
+        });
+
+        inssExistenciaCatSelect.addEventListener('change', () => {
+            if (inssExistenciaCatSelect.value === 'sim') {
+                inssCatNumberGroup.style.display = 'block';
+                document.getElementById('inss_numero_cat').setAttribute('required', 'required');
+            } else {
+                inssCatNumberGroup.style.display = 'none';
+                document.getElementById('inss_numero_cat').removeAttribute('required');
+                document.getElementById('inss_numero_cat').value = '';
+                document.getElementById('inss_numero_cat').classList.remove('valid', 'invalid', 'highlight-invalid');
+            }
+        });
+
+
+        // Testemunhas Logic (No Witnesses checkbox)
+        const noWitnessesCheckbox = document.getElementById('no_witnesses');
+        const witnessDetailsGroup = document.getElementById('witness_details_group');
+
+        noWitnessesCheckbox.addEventListener('change', () => {
+            const inputs = witnessDetailsGroup.querySelectorAll('input, select, textarea');
+            if (noWitnessesCheckbox.checked) {
+                witnessDetailsGroup.style.display = 'none';
+                inputs.forEach(input => {
+                    input.removeAttribute('required');
+                    input.value = '';
+                    input.classList.remove('valid', 'invalid', 'highlight-invalid');
+                });
+            } else {
+                witnessDetailsGroup.style.display = 'block';
+                // Decide which witness fields should be required by default
+                // For now, let's not auto-set required, as witnesses are optional unless specified
+            }
+        });
+
+        // --- Data Pre-filling (Jornada de Trabalho and Intervalos) ---
+        function prefillJornadaAndIntervalo() {
+            document.getElementById('jornada_horario_inicio_prefilled').value = document.getElementById('horario_inicio').value;
+            document.getElementById('jornada_horario_fim_prefilled').value = document.getElementById('horario_fim').value;
+            document.getElementById('intervalo_inicio_prefilled').value = document.getElementById('intervalo_inicio').value;
+            document.getElementById('intervalo_fim_prefilled').value = document.getElementById('intervalo_fim').value;
+
+            // Trigger validation for pre-filled fields
+            inputValidationHandler({ target: document.getElementById('jornada_horario_inicio_prefilled') });
+            inputValidationHandler({ target: document.getElementById('jornada_horario_fim_prefilled') });
+            inputValidationHandler({ target: document.getElementById('intervalo_inicio_prefilled') });
+            inputValidationHandler({ target: document.getElementById('intervalo_fim_prefilled') });
+        }
+
+        // Add event listeners to trigger pre-fill when 'Próximo' is clicked to go to step 5 or 6
+        nextBtn.addEventListener('click', () => {
+            if (currentStep === 4 || currentStep === 5) { // If moving to Jornada or Intervalo sections
+                prefillJornadaAndIntervalo();
+            }
+        });
+
+        // --- jQuery Masks ---
+        $(document).ready(function() {
+            $('#cpf').mask('000.000.000-00');
+            $('#rg').mask('00.000.000-0');
+            $('#cep').mask('00000-000');
+            $('#whatsapp').mask('(00) 00000-0000');
+            $('#telefone_emergencia').mask('(00) 00000-0000');
+            $('#cnpj').mask('00.000.000/0000-00');
+            $('#cep_empresa').mask('00000-000');
+            $('.mask-money').mask('000.000.000.000.000,00', {reverse: true});
+            $('.mask-phone').mask('(00) 00000-0000');
+            $('.mask-cpf').mask('000.000.000-00');
+        });
+
+        // --- Selfie Camera Logic ---
+        const takeSelfieBtn = document.getElementById('takeSelfieBtn');
+        const uploadSelfieBtn = document.getElementById('uploadSelfieBtn');
+        const retakeSelfieBtn = document.getElementById('retakeSelfieBtn');
+        const selfieVideo = document.getElementById('selfieVideo');
+        const selfieCanvas = document.getElementById('selfieCanvas');
+        const selfieDataInput = document.getElementById('selfieDataInput');
+        const uploadSelfieInput = document.getElementById('uploadSelfieInput');
+        let stream;
+
+        // Function to start camera
+        async function startCamera() {
+            selfieVideo.style.display = 'block'; // Show video feed
+            selfieCanvas.style.display = 'none'; // Hide canvas
+            selfieVideo.srcObject = null; // Clear previous stream
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                selfieVideo.srcObject = stream;
+                takeSelfieBtn.textContent = 'Capturar Selfie';
+                takeSelfieBtn.classList.remove('hidden');
+                uploadSelfieBtn.classList.remove('hidden'); // Ensure upload button is visible initially
+                retakeSelfieBtn.classList.add('hidden'); // Hide retake button initially
+            } catch (err) {
+                console.error("Erro ao acessar a câmera:", err);
+                alert("Não foi possível acessar a câmera. Verifique as permissões ou tente 'Escolher Arquivo'.");
+                takeSelfieBtn.classList.add('hidden'); // Hide take selfie if camera fails
+                uploadSelfieBtn.classList.remove('hidden'); // Ensure upload button is visible
+            }
+        }
+
+        // Function to stop camera
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                selfieVideo.srcObject = null;
+            }
+        }
+
+        takeSelfieBtn.addEventListener('click', async () => {
+            if (selfieVideo.srcObject) { // If camera is active, capture photo
+                const context = selfieCanvas.getContext('2d');
+                selfieCanvas.width = selfieVideo.videoWidth;
+                selfieCanvas.height = selfieVideo.videoHeight;
+                context.drawImage(selfieVideo, 0, 0, selfieCanvas.width, selfieCanvas.height);
+                selfieDataInput.value = selfieCanvas.toDataURL('image/png'); // Save as data URL
+                selfieCanvas.style.display = 'block'; // Show captured image
+                selfieVideo.style.display = 'none'; // Hide video feed
+                selfieCanvas.setAttribute('data-selfie-taken', 'true'); // Mark selfie as taken for print
+                takeSelfieBtn.classList.add('hidden'); // Hide "Capturar Selfie"
+                uploadSelfieBtn.classList.add('hidden'); // Hide "Escolher Arquivo"
+                retakeSelfieBtn.classList.remove('hidden'); // Show "Retirar Selfie"
+                stopCamera(); // Stop camera after capturing
+            } else { // If camera is not active, start it
+                await startCamera();
+            }
+        });
+
+        uploadSelfieBtn.addEventListener('click', () => {
+            uploadSelfieInput.click(); // Trigger file input click
+        });
+
+        uploadSelfieInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const context = selfieCanvas.getContext('2d');
+                        selfieCanvas.width = img.width;
+                        selfieCanvas.height = img.height;
+                        context.drawImage(img, 0, 0, selfieCanvas.width, selfieCanvas.height);
+                        selfieDataInput.value = selfieCanvas.toDataURL('image/png');
+                        selfieCanvas.style.display = 'block';
+                        selfieVideo.style.display = 'none';
+                        selfieCanvas.setAttribute('data-selfie-taken', 'true');
+                        takeSelfieBtn.classList.add('hidden');
+                        uploadSelfieBtn.classList.add('hidden');
+                        retakeSelfieBtn.classList.remove('hidden');
+                        stopCamera(); // Ensure camera is stopped
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        retakeSelfieBtn.addEventListener('click', () => {
+            selfieDataInput.value = ''; // Clear selfie data
+            selfieCanvas.style.display = 'none';
+            selfieCanvas.removeAttribute('data-selfie-taken'); // Remove print marker
+            takeSelfieBtn.textContent = 'Tirar Selfie'; // Reset button text
+            takeSelfieBtn.classList.remove('hidden'); // Show "Tirar Selfie" button
+            uploadSelfieBtn.classList.remove('hidden'); // Show "Escolher Arquivo" button
+            retakeSelfieBtn.classList.add('hidden'); // Hide "Retirar Selfie"
+            stopCamera(); // Ensure camera is stopped
+            // Do not start camera automatically, let user choose
+        });
+
+
+        // Event listeners for file inputs to trigger validation
+        document.getElementById('documentos_comprovacao').addEventListener('change', (event) => validateField(event.target));
+        document.getElementById('documentos_anexo').addEventListener('change', (event) => validateField(event.target));
+
+        // Initial display and real-time validation setup
+        showSection(currentStep);
+        validateCurrentSectionRealTime(); // Setup real-time validation for initial fields
+    </script>
+</body>
+</html>
